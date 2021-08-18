@@ -4,11 +4,11 @@ import os
 
 class SimpleDatasetLoader:
     def __init__(self,preprocessors=None):
-        self.preprocessors = preprocessors
-        # If preprocessors are not set, a list is set so that they can be
-        # sequentialy set later on
-        if self.preprocessors is None:
-            self.preprocessors = []
+            self.preprocessors = preprocessors
+            # If preprocessors are not set, a list is set so that they can be
+            # sequentialy set later on
+            if self.preprocessors is None:
+                self.preprocessors = []
 
     def load(self, imagePaths, verbose = -1):
         data = []
@@ -31,5 +31,5 @@ class SimpleDatasetLoader:
             if verbose > 0 and i>0 and (i+1) % verbose == 0:
                 print("[INFO] processed {}/{}".format(i + 1, len(imagePaths)))
 
-            # return a tuple
-            return (np.array(data), np.array(labels))
+        # return a tuple
+        return (np.array(data), np.array(labels))

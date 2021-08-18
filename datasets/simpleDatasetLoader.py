@@ -10,7 +10,7 @@ class SimpleDatasetLoader:
         if self.preprocessors is None:
             self.preprocessors = []
 
-    def load(self, imagePaths, verbose == -1):
+    def load(self, imagePaths, verbose = -1):
         data = []
         labels = []
 

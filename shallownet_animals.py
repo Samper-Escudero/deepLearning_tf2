@@ -4,16 +4,12 @@ from sklearn.metrics import classification_report
 from preprocessing import ImageToArrayPreprocessor
 from preprocessing import SimplePreprocessor
 from datasets import SimpleDatasetLoader
-from utils import plotMyNet
+from utils import plotMyNet, myArgParser
 from nn.conv import ShallowNet
 from tensorflow.keras.optimizers import SGD
 from imutils import paths
-import argparse
 
-ap = argparse.ArgumentParser()
-ap.add_argument("-d","--dataset", required = True,
-                help="path to input dataset")
-args = vars(ap.parse_args())
+args = myArgParser
 
 print("[INFO] loading dataset...")
 imagePaths = list(paths.list_images(args["dataset"]))

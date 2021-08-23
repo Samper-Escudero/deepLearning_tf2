@@ -11,11 +11,6 @@ from tensorflow.keras.datasets import cifar10
 from imutils import paths
 import argparse
 
-ap = argparse.ArgumentParser()
-ap.add_argument("-d","--dataset", required = True,
-                help="path to input dataset")
-args = vars(ap.parse_args())
-
 print("[INFO] loading CIFAR-10 dataset...")
 ((trainX,trainY),(testX,testY)) = cifar10.load_data()
 trainX = trainX.astype("float")/255.0

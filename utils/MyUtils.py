@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import argparse
 
 def plotMyNet(H, args="plottedNN.png", epochs = 100, save = False):
     plt.style.use("ggplot")
@@ -16,3 +17,9 @@ def plotMyNet(H, args="plottedNN.png", epochs = 100, save = False):
       plt.savefig(args["output"])
     else:
       plt.show()
+def myArgParser():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-d","--dataset", required = True,
+                    help="path to input dataset")
+    args = vars(ap.parse_args())
+    return args

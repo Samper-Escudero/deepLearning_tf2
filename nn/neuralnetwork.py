@@ -10,19 +10,24 @@ class NeuralNetwork:
         for i in np.arange(0, len(layers)-2):
             # each layer is a matrix of
             w = np.random.randn(layers[i]+1,layers[i+1]+1)
-            print("New W added {}".format(w))
             self.W.append(w / np.sqrt(layers[i]))
-            # the last layer do not output the bias term
-            w = np.random.randn(layers[-2] + 1, layers[-1])
-            self.W.append(w / np.sqrt(layers[-2]))
-            print("Resulting W {}".format(self.W))
+
+        # the last layer do not output the bias term
+        w = np.random.randn(layers[-2] + 1, layers[-1])
+        self.W.append(w / np.sqrt(layers[-2]))
 
             # implement the repr call so python knows how to represent the information
             # of the class
     def __repr__(self):
         return "NeuralNetwork: {}".format("-".join(str(l) for l in self.layers))
 
+    def sigmoid(self, x):
+        # compute and return the sigmoid activation value for a
+        # given input value
+        return 1.0 / (1 + np.exp(-x))
+
     def sigmoid_deriv(self,x):
+        # Derivative of the sigmoid, assuming x has already passed through sigmoid
         return x*(1-x)
 
     def fit(self, X, y, epochs = 1000, displayUpdate=100):

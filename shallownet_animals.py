@@ -8,6 +8,8 @@ from utils import plotMyNet, myArgParser
 from nn.conv import ShallowNet
 from tensorflow.keras.optimizers import SGD
 from imutils import paths
+from tensorflow.keras.models import load_model
+import numpy as np
 
 args = myArgParser()
 
@@ -32,13 +34,25 @@ opt = SGD(learning_rate=0.005)
 model = ShallowNet.build(width=32,height=32,depth=3,classes=3)
 model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
 
-# Training
-print("[INFO] training the network...")
-H = model.fit(trainX, trainY, validation_data=(testX,testY), batch_size=32, epochs=100, verbose=1)
 
+# Training
+lm = args["loadM"]
+if lm:
+    print("[INFO] Loading model...")
+    model = load_model(args["model"]+".hdf5")
+    H=np.load(args["model"]+'.npy',allow_pickle='TRUE').item()
+else:
+    print("[INFO] training the network...")
+    H = model.fit(trainX, trainY, validation_data=(testX,testY), batch_size=32, epochs=100, verbose=1)
+    # save the network to disk
+    print("[INFO] saving network...")
+    model.save(args["model"]+".hdf5")
+    np.save(args["model"]+'.npy',H.history)
 # Evaluate the network
 print("[INFO] evaluating the network...")
 predictions = model.predict(testX, batch_size=32)
 print(classification_report(testY.argmax(axis=1), predictions.argmax(axis=1), target_names=["cat","dog","panda"]))
-
-plotMyNet(H, save=False)
+if lm:
+    plotMyNet(H, save=False)
+else:
+    plotMyNet(H.history, save=False)

@@ -9,7 +9,7 @@ from nn.conv import ShallowNet
 from tensorflow.keras.optimizers import SGD
 from imutils import paths
 
-args = myArgParser
+args = myArgParser()
 
 print("[INFO] loading dataset...")
 imagePaths = list(paths.list_images(args["dataset"]))

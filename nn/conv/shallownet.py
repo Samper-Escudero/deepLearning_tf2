@@ -6,6 +6,10 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras import backend as K
 
 class ShallowNet:
+    # This type of method takes neither a self nor a cls parameter
+    # (but of course it’s free to accept an arbitrary number of
+    # other parameters). Therefore a static method can neither
+    #  modify object state nor class state.
     @staticmethod
     def build(width, height, depth, classes):
         model = Sequential()

@@ -28,3 +28,9 @@ def myArgParser():
     args = vars(ap.parse_args())
 
     return args
+def orderImageShape(trainX, K):
+    if K.image_data_format()=="channels_first":
+      trainX = trainX.reshape((trainX.shape[0], 1, trainX.shape[1],trainX.shape[2]))
+    else:
+      trainX = trainX.reshape((trainX.shape[0], trainX.shape[1],trainX.shape[2],1))
+    return trainX

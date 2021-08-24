@@ -12,7 +12,7 @@ class LeNet:
       model = Sequential()
       inputShape = (height, width, depth)
 
-      if I.image_data_format()=="channels_first":
+      if K.image_data_format()=="channels_first":
           inputShape=(depth, height, width)
 
       model.add(Conv2D(20,(5,5),padding="same", input_shape=inputShape))

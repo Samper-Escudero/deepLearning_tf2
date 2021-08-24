@@ -17,10 +17,11 @@ def plotMyNet(H, args="plottedNN.png", epochs = 100, save = False):
       plt.savefig(args["output"])
     else:
       plt.show()
-def myArgParser():
+def myArgParser(dataset=False):
     ap = argparse.ArgumentParser()
-    ap.add_argument("-d","--dataset", required = True,
-                    help="path to input dataset")
+    if dataset:
+        ap.add_argument("-d","--dataset", required = True,
+                        help="path to input dataset")
     ap.add_argument("-m", "--model", required=True,
                     help="path to model")
     ap.add_argument("-lm", "--loadM", default=False,type=bool,
@@ -28,7 +29,7 @@ def myArgParser():
     args = vars(ap.parse_args())
 
     return args
-def orderImageShape(trainX, K):
+def orderImShape(trainX, K):
     if K.image_data_format()=="channels_first":
       trainX = trainX.reshape((trainX.shape[0], 1, trainX.shape[1],trainX.shape[2]))
     else:

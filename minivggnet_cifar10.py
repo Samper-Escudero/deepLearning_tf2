@@ -35,12 +35,14 @@ else:
     print("[INFO] Training network...")
     H = model.fit(trainX,trainY,validation_data=(testX,testY),
                 batch_size=64, epochs=40, verbose=1)
-
+    print("[INFO] saving network...")
+    model.save(args["model"]+".hdf5")
+    np.save(args["model"]+'.npy',H.history)
 print("[INFO] Evaluating network...")
 predictions=model.predict(testX, batch_size=64)
 print(classification_report(testY.argmax(axis=1), predictions.argmax(axis=1), target_names=labelNames))
 
 if args["loadM"]:
-    plotMyNet(H)
+    plotMyNet(H, epochs=40)
 else:
-    plotMyNet(H.history)
+    plotMyNet(H.history, epochs=40)

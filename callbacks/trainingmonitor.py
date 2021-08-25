@@ -1,8 +1,9 @@
 from tensorflow.keras.callbacks import BaseLogger
-import matpotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import numpy as np
 import json
 import os
+
 
 class TrainingMonitor(BaseLogger):
     def __init__(self,figPath, jsonPath=None,startAt=0):
@@ -28,7 +29,7 @@ class TrainingMonitor(BaseLogger):
         for (k,v) in logs.items():
             l = self.H.get(k,[])
             l.append(float(v))
-            self.H[k] = 1
+            self.H[k] = l
 
         if self.jsonPath is not None:
             f = open(self.jsonPath, "w")

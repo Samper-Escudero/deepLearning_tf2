@@ -1,12 +1,13 @@
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
-from nn.conv MiniVGGNet
+from nn.conv import MiniVGGNet
 from tensorflow.keras.callbacks import LearningRateScheduler
 from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.datasets import cifar10
 from utils import myArgParser
 from utils import plotMyNet
 from tensorflow.keras.models import load_model
+import numpy as np
 
 def step_decay(epoch):
     initAlpha = 0.01

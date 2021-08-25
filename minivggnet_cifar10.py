@@ -3,7 +3,7 @@ from sklearn.metrics import classification_report
 from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.datasets import cifar10
 from tensorflow.keras.models import load_model
-
+import numpy as np
 from nn.conv import MiniVGGNet
 from utils import myArgParser
 from utils import plotMyNet

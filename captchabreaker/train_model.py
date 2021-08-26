@@ -33,7 +33,7 @@ for imagePath in path.list_images(args["dataset"]):
 data = np.array(data, dtype="float")/255.0
 labels = np.array(labels)
 
-((trainX,trainY),(testX,testY)) = train_test_split(data, labels, test_size=0.25, random_state=42)
+(trainX, testX, trainY, testY) = train_test_split(data, labels, test_size=0.25, random_state=42)
 
 lb = LabelBinarizer().fit(trainY)
 trainY = lb.transform(trainY)

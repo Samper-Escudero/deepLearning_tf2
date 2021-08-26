@@ -6,7 +6,7 @@ from tensorflow.keras.optimizers import SGD
 from nn.conv import LeNet
 from utils.catchahelper import preprocess
 from imutils import paths
-import matplotlib.pyplot as plt
+from utils import plotMyNet
 import numpy as np
 import argparse
 import os
@@ -30,3 +30,28 @@ for imagePath in path.list_images(args["dataset"]):
 
     label=imagePath.split(os.path.sep)[-2]
     labels.append(label)
+data = np.array(data, dtype="float")/255.0
+labels = np.array(labels)
+
+((trainX,trainY),(testX,testY)) = train_test_split(data, labels, test_size=0.25, random_state=42)
+
+lb = LabelBinarizer().fit(trainY)
+trainY = lb.transform(trainY)
+testY = lb.transform(testY)
+
+print("[INFO] Compiling model...")
+model = LeNet.build(widht=28, height=28, depth=1,classes=9)
+opt =SGD(learning_rate=0.01)
+model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
+
+print("[INFO] training network...")
+H = model.fit(trainX, trainY, validation_data=(testX,testY), batch_size=32, epochs = 15, verbose=1)
+
+print("[INFO] evaluating the network...")
+predictions = model.predict(testX, batch_size=32)
+print(classification_report(testY.argmax(axis=1), predictions.argmax(axis=1), target_names=lb.classes_))
+
+print("[INFO] saving model...")
+model.save(args["model"])
+
+plotMyNet(H.history, epochs = 15)

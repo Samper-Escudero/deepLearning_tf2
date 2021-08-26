@@ -3,6 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.optimizers import SGD
+
 from nn.conv import LeNet
 from utils.catchahelper import preprocess
 from imutils import paths
@@ -11,6 +12,7 @@ import numpy as np
 import argparse
 import os
 import cv2
+
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-d","--dataset",required=True, help="path to input dataset")

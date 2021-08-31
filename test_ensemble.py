@@ -12,7 +12,7 @@ ap.add_argument("-m", "--models", required=True,
 help="path to models directory")
 args = vars(ap.parse_args())
 
-(testX, testy) = cifar10.load_data()[1]
+(testX, testY) = cifar10.load_data()[1]
 testX = testX.astype("float")/255.0
 
 labelNames = ["airplane", "automobile", "bird", "cat", "deer",
@@ -22,7 +22,7 @@ lb = LabelBinarizer()
 testY = lb.fit_transform(testY)
 
 # obtain all names ending in .model
-modelPaths = os.path.sep.join([args["model"],"*.model"])
+modelPaths = os.path.sep.join([args["models"],"*.model"])
 # create a list with the result
 modelPaths = list(glob.glob(modelPaths))
 models = []
@@ -37,5 +37,5 @@ predictions =[]
 for model in models:
     predictions.append(model.predict(testX,batch_size=64))
 
-predictions = np.average(predictions.argmax(axis = 0))
-print(classification_report(testY.argmax(axis=1), predictions.argmax(axis=1), target_names=labelNames)
+predictions = np.average(predictions, axis = 0)
+print(classification_report(testY.argmax(axis=1), predictions.argmax(axis=1), target_names=labelNames))

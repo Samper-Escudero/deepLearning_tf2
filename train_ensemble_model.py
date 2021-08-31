@@ -31,7 +31,8 @@ testY = lb.transform(testY)
 
 labelNames = ["airplane", "automobile", "bird", "cat", "deer",
                 "dog", "frog", "horse", "ship", "truck"]
-aug = ImageDataGenerator(rotation_range = 10, width_shift_range=0.1, height_shift_range=0.1, horizontal_flip=True, fill_model="nearest")
+aug = ImageDataGenerator(rotation_range = 10, width_shift_range=0.1, height_shift_range=0.1,
+                            horizontal_flip=True, fill_mode="nearest")
 for i in np.arange(0, args["num_models"]):
     print("[INFO] training model {}/{}".format(i+1,args["num_models"]))
     opt = SGD(learning_rate=0.01, decay = 0.01/40, momentum=0.9,nesterov=True)
@@ -46,7 +47,7 @@ for i in np.arange(0, args["num_models"]):
     report = classification_report(testY.argmax(axis=1), predictions.argmax(axis=1), target_names=labelNames)
 
     p = [args["output"], "model_{}.txt".format(i)]
-    f.open(os.path.sep.join(p), "w")
+    f = open(os.path.sep.join(p), "w")
     f.write(report)
     f.close()
 

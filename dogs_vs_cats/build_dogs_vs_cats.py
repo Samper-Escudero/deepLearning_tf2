@@ -31,6 +31,7 @@ aap = AspectAwarePreprocessor(256, 256)
 (R, G, B) = ([],[],[])
 
 for(dType, paths, labels, outputPath) in datasets:
+    # loop over the datasets and create a writer for each one
     print("[INFO]  building {}...".format(outputPath))
     writer = HDF5DatasetWriter((len(paths), 256, 256, 3), outputPath)
 
@@ -38,9 +39,13 @@ for(dType, paths, labels, outputPath) in datasets:
     pbar = progressbar.ProgressBar(maxval = len(paths), widgets = widgets).start()
 
     for(i,path) in enumerate(zip(paths, labels)):
+        # loop over each image on the dataset and its labels
+        #
         image = cv2.imread(path)
         image = aap.preprocess(image)
 
+        # in the training dataset r,g and b pixels are to be extracted so that
+        # mean substraction normalisation can be applied
         if dType =="train":
             (b, g, r) = cv2.mean(image)[:3]
             R.append(r)
@@ -53,6 +58,7 @@ for(dType, paths, labels, outputPath) in datasets:
     writer.close()
 
 print("[INFO] serializing images...")
+# create a dictionary with the average rgb values and save it on json
 D ={"R": np.mean(R), "G":np.mean(G), "B":np.mean(B)}
 f.open(config.DATASET_MEAN, "w")
 f.write(json.dumps(D))

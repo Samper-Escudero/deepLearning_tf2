@@ -1,5 +1,5 @@
 from config import dogs_vs_cats_config as config
-from sklearn.preprocessing import LabelBinarizer
+from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from preprocessing import AspectAwarePreprocessor
 from dl4cv_io import HDF5DatasetWriter
@@ -14,7 +14,7 @@ trainPaths = list(paths.list_images(config.IMAGES_PATH))
 trainLabels = [p.split(os.path.sep)[-1].split(".")[0] for p in trainPaths]
 le = LabelEncoder()
 trainLabels = le.fit_transform(trainLabels)
-
+print("[INFO] paths len {}".format(len(trainPaths)))
 split = train_test_split(trainPaths, trainLabels, test_size=config.NUM_TEST_IMAGES, stratify=trainLabels, random_state=42)
 (trainPaths, testPaths, trainLabels, testLabels) = split
 
@@ -38,7 +38,7 @@ for(dType, paths, labels, outputPath) in datasets:
     widgets = ["Building Dataset: ", progressbar.Percentage(), " ", progressbar.Bar()," ", progressbar.ETA()]
     pbar = progressbar.ProgressBar(maxval = len(paths), widgets = widgets).start()
 
-    for(i,path) in enumerate(zip(paths, labels)):
+    for(i,(path,label)) in enumerate(zip(paths, labels)):
         # loop over each image on the dataset and its labels
         #
         image = cv2.imread(path)
@@ -60,6 +60,6 @@ for(dType, paths, labels, outputPath) in datasets:
 print("[INFO] serializing images...")
 # create a dictionary with the average rgb values and save it on json
 D ={"R": np.mean(R), "G":np.mean(G), "B":np.mean(B)}
-f.open(config.DATASET_MEAN, "w")
+f = open(config.DATASET_MEAN, "w")
 f.write(json.dumps(D))
 f.close()

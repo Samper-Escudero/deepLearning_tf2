@@ -7,11 +7,23 @@ from tensorflow.keras.layers import Dropout
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import Flatten
 from tensorflow.keras.layers import Input
-from tensorflow.keras.layers import Model
+from tensorflow.keras.models import Model
 from tensorflow.keras.layers import concatenate
 from tensorflow.keras import backend as K
 
+# chanDim is the channel dimensions which is either "channels last" or "channels first"
 class MiniGoogleNet:
+    # this network was introduced by Szegedy et al. in their 2014 paper, Going Deeper With Convolutions
+    # The architectura makes use of a network in network or micro-architecture to construct the macro-architecture
+    # The inception module was introduced here a building block that fits into a Convolutional Neural Network enabling
+    # it to learn CONV layers with multiple filters
+
+    # Two aspects are notworthy from this implementation:
+    #       * The model is tiny compared to previous sequential networks (AlexNet or VGGNet)
+    #       * The authors obtain such dramatic drop in network architecture while still increasing the depth overall networks
+    #         This is accomplished by removing FC layers and using global average pooling instead (recall that most weights are in the FC layers)
+
+    # This construction based on micro-architectures inspired later variants such as Residual modules (ResNet), the Fire Module (SqueezeNet) 
     @staticmethod
     def conv_module(x, K, kX, kY, stride, chanDim, padding="same"):
         x = Conv2D(K, (kX, kY), strides = stride, padding = padding)(x)
@@ -24,7 +36,7 @@ class MiniGoogleNet:
     def inception_module(x, numK1x1, numK3x3, chanDim):
         conv_1x1 = MiniGoogleNet.conv_module(x, numK1x1, 1,1, (1,1), chanDim)
         conv_3x3 = MiniGoogleNet.conv_module(x, numK3x3, 3, 3, (1,1), chanDim)
-        x = concatenate([conv_1x1m conv_3x3], axis=chanDim)
+        x = concatenate([conv_1x1, conv_3x3], axis=chanDim)
 
         return x
 
@@ -38,7 +50,7 @@ class MiniGoogleNet:
     @staticmethod
     def build(width, height, depth, classes):
         inputShape = (height, width, depth)
-        chanDim = 1
+        chanDim = -1
         inputs = Input(shape=inputShape)
         x = MiniGoogleNet.conv_module(inputs, 96, 3, 3, (1, 1), chanDim)
 

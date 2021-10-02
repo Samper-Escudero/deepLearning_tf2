@@ -2,7 +2,7 @@ import matplotlib
 matplotlib.use("Agg")
 
 from sklearn.preprocessing import LabelBinarizer
-from nn.conv import MiniVGGNet
+from nn.conv import MiniGoogleNet
 from callbacks import TrainingMonitor
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.callbacks import LearningRateScheduler
@@ -56,7 +56,7 @@ model = MiniGoogleNet.build(width=32, height=32, depth = 3, classes = 10)
 model.compile(loss="categorical_crossentropy", optimizer=opt, metrics = ["accuracy"])
 
 print("[INFO] training network...")
-model.fit_generator(aug.flow(trainX, trainY, batch_size=64)
+model.fit_generator(aug.flow(trainX, trainY, batch_size=64),
                      validation_data=(testX, testY), steps_per_epoch=len(trainX)//64, epochs= NUM_EPOCHS, callbacks=callbacks, verbose=1)
 
 print("[INFO] training network...")

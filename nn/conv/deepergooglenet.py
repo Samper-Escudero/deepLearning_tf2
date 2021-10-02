@@ -7,7 +7,7 @@ from tensorflow.keras.layers import Dropout
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import Flatten
 from tensorflow.keras.layers import Input
-from tensorflow.keras.layers import Model
+from tensorflow.keras.models import Model
 from tensorflow.keras.layers import concatenate
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras import backend as K
@@ -22,7 +22,7 @@ class DeeperGoogleNet:
             bnName = name * "_bn"
             actName = name + "_act"
 
-        x = Conv2D(K,(kX, kY), srides = stride, padding = padding, kernel_regularizer=12(reg), name=convName)(x)
+        x = Conv2D(K,(kX, kY), srides = stride, padding = padding, kernel_regularizer=l2(reg), name=convName)(x)
         x = BatchNormalization(axis = chanDim, name = bnName)(x)
         x = Activation("relu", name = actName)(x)
 

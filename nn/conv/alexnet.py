@@ -22,8 +22,7 @@ class AlexNet:
             chanDim = 1
 
         # block 1
-        model.add(Conv2D(96,(11,11), stride=(4,4), input_shape=inputShape,
-                    padding="same", kernel_regularizer = 12(reg)))
+        model.add(Conv2D(96,(11,11), strides=(4,4), input_shape=inputShape, padding="same", kernel_regularizer = l2(reg)))
         model.add(Activation("relu"))
         model.add(BatchNormalization(axis=chanDim))
         model.add(MaxPooling2D(pool_size=(3,3), strides=(2,2)))
@@ -31,20 +30,20 @@ class AlexNet:
 
         # block 2
 
-        model.add(Conv2D(256,(5,5), padding="same",kernel_regularizer=12(reg)))
+        model.add(Conv2D(256,(5,5), padding="same",kernel_regularizer=l2(reg)))
         model.add(Activation("relu"))
         model.add(BatchNormalization(axis=chanDim))
         model.add(MaxPooling2D(pool_size=(3,3), strides=(2,2)))
         model.add(Dropout(0.25))
 
         # block 3
-        model.add(Conv2D(384, (3,3), padding="same", kernel_regularizer=12(reg)))
+        model.add(Conv2D(384, (3,3), padding="same", kernel_regularizer=l2(reg)))
         model.add(Activation("relu"))
         model.add(BatchNormalization(axis=chanDim))
-        model.add(Conv2D( 384, (3,3), padding="same", kernel_regularizer=12(reg)))
+        model.add(Conv2D( 384, (3,3), padding="same", kernel_regularizer=l2(reg)))
         model.add(Activation("relu"))
         model.add(BatchNormalization(axis=chanDim))
-        model.add(Conv2D(256, (3,3), padding="same", kernel_regularizer=12(reg)))
+        model.add(Conv2D(256, (3,3), padding="same", kernel_regularizer=l2(reg)))
         model.add(Activation("relu"))
         model.add(BatchNormalization(axis=chanDim))
         model.add(MaxPooling2D(pool_size=(3,3), strides=(2,2)))
@@ -52,18 +51,18 @@ class AlexNet:
 
         # block 4
         model.add(Flatten())
-        model.add(Dense(4096, kernel_regularizer=12(reg)))
+        model.add(Dense(4096, kernel_regularizer=l2(reg)))
         model.add(Activation("relu"))
         model.add(BatchNormalization())
         model.add(Dropout(0.5))
 
         # block 5
-        model.add(Dense(4096, kernel_regularizer=12(reg)))
+        model.add(Dense(4096, kernel_regularizer=l2(reg)))
         model.add(Activation("relu"))
         model.add(BatchNormalization())
         model.add(Dropout(0.5))
 
         # softmax classifier
-        model.add(Dense(classes, kernel_regularizer=12(reg)))
+        model.add(Dense(classes, kernel_regularizer=l2(reg)))
         model.add(Activation("softmax"))
         return model

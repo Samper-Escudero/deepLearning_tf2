@@ -12,6 +12,46 @@ from tensorflow.keras.layers import concatenate
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras import backend as K
 
+# this network was introduced by Szegedy et al. in their 2014 paper, Going Deeper With Convolutions
+# The architectura makes use of a network in network or micro-architecture to construct the macro-architecture
+# The inception module was introduced here a building block that fits into a Convolutional Neural Network enabling
+# it to learn CONV layers with multiple filters
+
+# Two aspects are notworthy from this implementation:
+#       * The model is tiny compared to previous sequential networks (AlexNet or VGGNet)
+#       * The authors obtain such dramatic drop in network architecture while still increasing the depth overall networks
+#         This is accomplished by removing FC layers and using global average pooling instead (recall that most weights are in the FC layers)
+
+# This construction based on micro-architectures inspired later variants such as Residual modules (ResNet), the Fire Module (SqueezeNet)
+
+
+# The idea behind inception module:
+#       * It can be hard to decide size of the filter for a given CONV layer
+#           why not learn 5x5, 3x3 and 1x1, computing them in parallel and then
+#           concatenate the resulting feature maps along the channel dimensions?
+#           The next layers receives these concatenated, mixed filters and performs the same process
+#           This process taken as a whole enables GoogleNet to learn both local features(small convs) and abstracted features (larger convs)
+#       * By learning multiple filter sizes, the module can be turned into a multi-level feature extractor
+#               - 5 x 5 can learn abstract features
+#               - 1 x 1 is by definition local
+#               - 3 x 3 is a balance between the previous
+
+# Four branches in the inception module:
+#       1. 1 x 1 local features from input
+#       2. 1 x 1 convolution (not only to learn local features but to dimensionality reduction) and 3 x 3.
+#               Preceding 3 x 3 and 5 x 5 with 1 x 1 is a good practice to reduce computation. The nº of 1 x1 in this branch is always smaller than nº 3 x 3
+#       3. 1 x 1 convolution to reduce and 5 x 5
+#       4. Pool projection branch --> 3 x 3 max pooling with a stride of 1 x 1
+#               Over the years, models performing pooling demonstrated obtaining higher accuracy
+#               Even though Springenberg et al.Striving for Simplicity: The All Convolutional Net
+#               showed that POOL can be replaced by CONV to reduce volume size
+#               Szegedy et al. added POOL based on hypothesis it was required so CNNs perform properly.
+#               The output is then fed into a series of 1 x 1 convs to learn local features
+
+#       Finally, all four branches are concatenated along the channel dimension. Special care is taken during implementation
+#       to ensure the output of each branch has the same volume size.
+#       In practice, it is common to stack various Inception layers before reducing dim with POOL
+
 class DeeperGoogleNet:
     @staticmethod
     def conv_module(x, K, kX, kY, stride, chanDim, padding = "same", reg = .0005, name = None):
